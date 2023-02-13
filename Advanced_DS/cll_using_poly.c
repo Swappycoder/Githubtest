@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include<math.h>
+#include <math.h>
 
 //........................................................................................................
-
 
 struct node
 {
@@ -14,7 +13,6 @@ struct node
 
 //........................................................................................................
 
-
 void create(struct node *H)
 {
     struct node *last, *curr;
@@ -24,9 +22,9 @@ void create(struct node *H)
     {
         curr = (struct node *)malloc(sizeof(struct node));
         printf("Enter coefficient: ");
-        scanf("%d",&curr->coef);
+        scanf("%d", &curr->coef);
         printf("Enter exponent: ");
-        scanf("%d",&curr->exp);
+        scanf("%d", &curr->exp);
         last->next = curr;
         curr->next = H;
         last = curr;
@@ -35,9 +33,7 @@ void create(struct node *H)
     } while (ch == 1);
 }
 
-
 //........................................................................................................
-
 
 void display(struct node *H)
 {
@@ -64,17 +60,16 @@ void display(struct node *H)
 
 //........................................................................................................
 
-
-void add(struct node *H1 ,struct node *H2 ,struct node *H3)
+void add(struct node *H1, struct node *H2, struct node *H3)
 {
-    struct node *temp ,*curr1, *curr2, *curr3;
+    struct node *temp, *curr1, *curr2, *curr3;
     curr1 = H1->next;
     curr2 = H2->next;
     curr3 = H3;
-    while ( curr1->exp != -1 && curr2->exp != -1)
+    while (1)
     {
-        if( curr1->exp == curr2->exp)
-        {   
+        if (curr1->exp == curr2->exp)
+        {
             temp = (struct node *)malloc(sizeof(struct node));
             temp->next = H3;
             temp->coef = curr1->coef + curr2->coef;
@@ -86,7 +81,7 @@ void add(struct node *H1 ,struct node *H2 ,struct node *H3)
         }
         else
         {
-            if(curr1->exp > curr2->exp)
+            if (curr1->exp > curr2->exp)
             {
                 temp = (struct node *)malloc(sizeof(struct node));
                 temp->exp = curr1->exp;
@@ -107,42 +102,41 @@ void add(struct node *H1 ,struct node *H2 ,struct node *H3)
                 curr2 = curr2->next;
             }
         }
+        if ((curr1->exp == -1) && (curr2->exp == -1))
+            break;
     }
 }
 
 //........................................................................................................
 
- 
-float Eval(struct node *H3, float x)
+int eval(struct node *H, int x)
 {
-    float result = 0;
-    struct node* curr3;
-    curr3 = H3->next;
-    curr3 = H3;
-    do 
+    int result = 0;
+    struct node *curr;
+    curr = H->next;
+    while (curr->exp != -1)
     {
-        result += curr3->coef * pow(x, curr3->exp);
-        curr3 = curr3->next;
-    } while (curr3->exp != -1);
+        result = result + ((curr->coef) * pow(x, curr->exp));
+        curr = curr->next;
+    }
     return result;
 }
 
 //........................................................................................................
 
-
 int main()
 {
-    struct node *h1, *h2 ,*h3;
-    float x;
-    h1 = (struct node*)malloc(sizeof(struct node));
+    struct node *h1, *h2, *h3;
+    int x, result;
+    h1 = (struct node *)malloc(sizeof(struct node));
     h1->exp = -1;
     h1->next = h1;
 
-    h2 = (struct node*)malloc(sizeof(struct node));
+    h2 = (struct node *)malloc(sizeof(struct node));
     h2->exp = -1;
     h2->next = h2;
 
-    h3 = (struct node*)malloc(sizeof(struct node));
+    h3 = (struct node *)malloc(sizeof(struct node));
     h3->exp = -1;
     h3->next = h3;
     printf("Enter first polynomial: \n");
@@ -154,13 +148,13 @@ int main()
     display(h2);
 
     printf("added polynomial: \n");
-    add(h1,h2,h3);
+    add(h1, h2, h3);
     display(h3);
 
     printf("Enter the value of x: ");
-    scanf("%f", &x);
+    scanf("%d", &x);
 
-    float result = Eval(h3,x);
-    printf("Evaluated poly: ",result);
+    result = eval(h3, x);
+    printf("Evaluated poly:%d ",result);
     return 0;
 }
